@@ -1,0 +1,20 @@
+public class cur_self_class {
+    public String currency1 {get;set;}
+    public String currency2 {get;set;}
+    public double value1 {get;set;}
+    public double value2 {get;set;}
+    
+    public void convert_curr(){
+        if (currency1 == currency2){
+            value2 = value1;
+        }
+        else if (currency1 == 'Rupee' && currency2 == 'Dollar'){
+            value2 = value1/82;
+        }
+        
+        else if (currency1 == 'Dollar' && currency2 == 'Rupee'){
+            value2 = value1*82;
+        }
+    }
+
+}

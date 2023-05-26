@@ -1,0 +1,78 @@
+def get_marks():
+    marks = {}
+    qualities = ['punctuality', 'productivity', 'decision making', 'teamwork', 'communication', 'work efficiency', 'learning ability', 'adhere to deadline', 'presentation skills', 'technical knowledge', 'problem solving']
+    for quality in qualities:
+        while True:
+            try:
+                score = int(input(f"Enter the {quality} score (0-100): "))
+                if score < 0 or score > 100:
+                    raise ValueError
+                marks[quality] = score
+                break
+            except ValueError:
+                print("Invalid input! Please enter an integer value between 0 and 100.")
+    return marks
+
+def calculate_average(marks):
+    total = sum(marks.values())
+    return total / len(marks)
+
+def grade_employee(average):
+    if average > 90:
+        return "Outstanding"
+    elif 71 <= average <= 90:
+        return "Excellent"
+    elif 51 <= average <= 70:
+        return "Good"
+    elif 41 <= average <= 50:
+        return "Satisfactory"
+    else:
+        return "Poor"
+
+def get_actions_to_improve(marks):
+    actions = []
+    thresholds = {
+        'punctuality': 40,
+        'productivity': 40,
+        'decision making': 40,
+        'teamwork': 40,
+        'communication': 40,
+        'work efficiency': 40,
+        'learning ability': 40,
+        'adhere to deadline': 40,
+        'presentation skills': 40,
+        'technical knowledge': 40,
+        'problem solving': 40
+    }
+    
+    improvement_actions = {
+        'punctuality': "Be on time. Try setting reminders or alarms to help you manage your time effectively.",
+        'productivity': "Manage your time efficiently. Prioritize tasks, break them into smaller steps, and set realistic deadlines.",
+        'decision making': "Try to evaluate the situation before making decisions. Gather relevant information, consider alternatives, and weigh the pros and cons.",
+        'teamwork': "Show compassion and empathy towards your colleagues. Offer support, actively listen, and collaborate effectively.",
+        'communication': "Feel free to talk to your peers. Take a communication masterclass to enhance your verbal and written communication skills. Attend networking events to improve your professional connections.",
+        'work efficiency': "Manage your time and stress properly. Break tasks into manageable chunks, take regular breaks, and practice stress management techniques such as deep breathing or meditation.",
+        'learning ability': "Be curious and open to learning. Seek opportunities to expand your knowledge and skills. Take online courses or attend workshops to enhance your learning abilities.",
+        'adhere to deadline': "Be punctual and maintain a schedule or a to-do list to stay organized. Set reminders for deadlines and prioritize tasks accordingly.",
+        'presentation skills': "Take up a course on presentation skills to enhance your ability to deliver engaging and effective presentations. Practice speaking in front of others and seek feedback to improve.",
+        'technical knowledge': "Learn more about your field of expertise. Take online courses, read relevant books or articles, and stay updated with the latest industry trends and advancements.",
+        'problem solving': "Think out of the box when faced with challenges. Break down complex problems into smaller parts, explore different perspectives, and brainstorm innovative solutions."
+    }
+
+    for quality, score in marks.items():
+        if score < thresholds[quality]:
+            actions.append(f"{improvement_actions[quality]}")
+    return actions
+
+print("\nWelcome to the Employee Evaluation System!\n")
+marks = get_marks()
+average = calculate_average(marks)
+grade = grade_employee(average)
+actions = get_actions_to_improve(marks)
+
+print(f"\nAverage Score: {average}")
+print(f"\nOverall Employee Performance: {grade}")
+if actions:
+    print("\nActions to Improve:")
+    for action in actions:
+        print(action,'\n')

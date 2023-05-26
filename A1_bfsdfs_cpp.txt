@@ -1,0 +1,164 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Graph
+{
+    int V;
+    list<int> *adj;
+
+public:
+    Graph(int V);
+    void addEdge(int a, int b);
+    void printAdjList();
+    void DFS(int s);
+    void BFS(int s);
+    void DFSUtil(int s, bool visited[]);
+    void BFSUtil(int s, bool visited[], list<int> &queue);
+};
+
+Graph::Graph(int V)
+{
+    this->V = V;
+    adj = new list<int>[V];
+}
+
+void Graph::addEdge(int a, int b)
+{
+    adj[a].push_back(b);
+    adj[b].push_back(a);
+}
+
+void Graph::printAdjList()
+{
+    cout << "\nAdjacency List - \n";
+    for (int a = 0; a < V; a++)
+    {
+        cout << a << " --> ";
+        for (int b : adj[a])
+        {
+            cout << b << " ";
+        }
+        cout << endl;
+    }
+}
+
+void Graph::DFS(int s)
+{
+    bool *visited = new bool[V];
+    for (int i = 0; i < V; i++)
+    {
+        visited[i] = false;
+    }
+
+    DFSUtil(s, visited);
+}
+
+void Graph::DFSUtil(int s, bool visited[])
+{
+    visited[s] = true;
+    cout << s << " ";
+
+    list<int>::iterator i;
+    for (i = adj[s].begin(); i != adj[s].end(); i++)
+    {
+        if (!visited[*i])
+        {
+            DFSUtil(*i, visited);
+        }
+    }
+}
+
+void Graph::BFS(int s)
+{
+    bool *visited = new bool[V];
+    for (int i = 0; i < V; i++)
+    {
+        visited[i] = false;
+    }
+
+    list<int> queue;
+    visited[s] = true;
+    queue.push_back(s);
+    BFSUtil(s, visited, queue);
+}
+
+void Graph::BFSUtil(int s, bool visited[], list<int> &queue)
+{
+    if (queue.empty())
+    {
+        return;
+    }
+
+    s = queue.front();
+    cout << s << " ";
+    queue.pop_front();
+
+    list<int>::iterator i;
+    for (i = adj[s].begin(); i != adj[s].end(); i++)
+    {
+        if (!visited[*i])
+        {
+            visited[*i] = true;
+            queue.push_back(*i);
+        }
+    }
+    BFSUtil(s, visited, queue);
+}
+
+int main()
+{
+
+    int node, edge, s;
+    cout << "Enter the no. of nodes ";
+    cin >> node;
+    cout << "Enter the no. of edges ";
+    cin >> edge;
+    Graph g(node);
+    for (int i = 1; i <= edge; i++)
+    {
+        int a, b;
+        cout << "Enter first node for edge " << i << " ";
+        cin >> a;
+        cout << "Enter second node for edge " << i << " ";
+        cin >> b;
+        g.addEdge(a, b);
+    }
+    int choice;
+    do
+    {
+        cout << "\n---------Menu---------\n1. Print Adjacency List\n2. BFS\n3. DFS\n4. Exit\n\nPlease enter a valid input - ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            g.printAdjList();
+            break;
+        case 2:
+            cout << "Enter source node (0 to " << node << ") ";
+            cin >> s;
+            cout << "BFS Traversal - ";
+            g.BFS(s);
+            cout << endl;
+            break;
+        case 3:
+            cout << "Enter source node (0 to " << node << ") ";
+            cin >> s;
+            cout << "DFS Traversal - ";
+            g.DFS(s);
+            cout << endl;
+            break;
+
+        case 4:
+            cout << "Exititng the program! Bye.";
+            break;
+
+        default:
+            cout << "Invalid Choice!! Try again. ";
+            break;
+        }
+    } while (choice != 4);
+
+    return 0;
+}
+// Input
+// 7 11 0 1 0 3 1 2 1 3 1 5 1 6 2 3 2 4 2 5 3 4 4 6

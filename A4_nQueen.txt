@@ -1,0 +1,149 @@
+def is_safe(board, row, col, n):
+    # Check if a queen can be placed at board[row][col]
+
+    # Check left side of current row
+    for i in range(col):
+        if board[row][i] == 1:
+            return False
+
+    # Check upper diagonal on the left side
+    i, j = row, col
+    while i >= 0 and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i -= 1
+        j -= 1
+
+    # Check lower diagonal on the left side
+    i, j = row, col
+    while i < n and j >= 0:
+        if board[i][j] == 1:
+            return False
+        i += 1
+        j -= 1
+
+    return True
+
+
+def solve_n_queens_util(board, col, n, solutions):
+    # Base case: If all queens are placed, add the solution to the list
+    if col >= n:
+        solution = []
+        for row in board:
+            solution.append("".join(["Q" if cell == 1 else "-" for cell in row]))
+        solutions.append(solution)
+        return
+
+    # Try placing the queen in each row of the current column
+    for i in range(n):
+        if is_safe(board, i, col, n):
+            # Place the queen at board[i][col]
+            board[i][col] = 1
+
+            # Recur to place the rest of the queens
+            solve_n_queens_util(board, col + 1, n, solutions)
+
+            # Backtrack and remove the queen from board[i][col]
+            board[i][col] = 0
+
+
+def solve_n_queens(n):
+    # Create an empty board
+    board = [[0] * n for _ in range(n)]
+
+    # List to store all solutions
+    solutions = []
+
+    # Solve the N-Queens problem
+    solve_n_queens_util(board, 0, n, solutions)
+
+    return solutions
+
+
+# Get the board size from the user
+n = int(input("Enter the board size: "))
+
+# Solve the N-Queens problem and get all solutions
+all_solutions = solve_n_queens(n)
+
+# Display all solutions
+print(f"All possible solutions for N = {n}:")
+for i, solution in enumerate(all_solutions):
+    print(f"Solution {i + 1}:")
+    for row in solution:
+        print(row)
+    print()
+
+        '''
+    Enter the board size: 5
+All possible solutions for N = 5:
+Solution 1:
+Q----
+---Q-
+-Q---
+----Q
+--Q--
+
+Solution 2:
+Q----
+--Q--
+----Q
+-Q---
+---Q-
+
+Solution 3:
+--Q--
+Q----
+---Q-
+-Q---
+----Q
+
+Solution 4:
+---Q-
+Q----
+--Q--
+----Q
+-Q---
+
+Solution 5:
+-Q---
+---Q-
+Q----
+--Q--
+----Q
+
+Solution 6:
+----Q
+--Q--
+Q----
+---Q-
+-Q---
+
+Solution 7:
+-Q---
+----Q
+--Q--
+Q----
+---Q-
+
+Solution 8:
+----Q
+-Q---
+---Q-
+Q----
+--Q--
+
+Solution 9:
+---Q-
+-Q---
+----Q
+--Q--
+Q----
+
+Solution 10:
+--Q--
+----Q
+-Q---
+---Q-
+Q----
+'''

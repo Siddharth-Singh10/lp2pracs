@@ -1,0 +1,45 @@
+<apex:page controller="cur_self_class">
+    <apex:sectionHeader title="Currency Converter"/>
+    <apex:form>
+        <apex:pageBlock title="Simple Currency Converter">
+            <apex:pageBlockSection>
+                
+                <!--Choose currency 1-->
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel>Currency 1</apex:outputLabel>
+                    <apex:selectRadio value="{!currency1}">
+                        <apex:selectOption itemValue="Rupee" itemLabel="Rupee"/>
+                        <apex:selectOption itemValue="Dollar" itemLabel="Dollar"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                
+                <!--Currency 1 (Input Value)-->
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel>Input Value: </apex:outputLabel>
+					<apex:inputText value="{!value1}"/>
+                </apex:pageBlockSectionItem>
+                
+                <!--Choose currency 2-->
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel>Currency 2</apex:outputLabel>
+                    <apex:selectRadio value="{!currency2}">
+                        <apex:selectOption itemValue="Rupee" itemLabel="Rupee"/>
+                        <apex:selectOption itemValue="Dollar" itemLabel="Dollar"/>
+                    </apex:selectRadio>
+                </apex:pageBlockSectionItem>
+                
+                <!--Currency 2 (Calculated Value)-->
+                <apex:pageBlockSectionItem>
+                    <apex:outputLabel>Value after conversion: </apex:outputLabel>
+					<apex:outputText value="{!value2}" id="res"/>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+            
+            <!--Calling the convert function-->
+            <apex:pageBlockButtons location="bottom" >
+            	<apex:commandButton value="Convert" action="{!convert_curr}" reRender="res"/>
+            </apex:pageBlockButtons>
+            
+        </apex:pageBlock>
+    </apex:form>
+</apex:page>

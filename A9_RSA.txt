@@ -1,0 +1,80 @@
+# (Rivest-Shamir-Adleman) 
+import random
+import math
+
+
+def generate_key_pair(p, q):
+    # Calculate n and phi(n)
+    n = p * q
+    phi_n = (p - 1) * (q - 1)
+
+    # Find e such that e and phi(n) are coprime
+    e = random.randint(2, phi_n)
+    while math.gcd(e, phi_n) != 1:
+        e = random.randint(2, phi_n)
+
+    # Find d such that (d * e) % phi(n) = 1
+    d = multiplicative_inverse(e, phi_n)
+
+    return ((e, n), (d, n))
+
+
+'''def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a'''
+
+
+def multiplicative_inverse(a, m):
+    # Extended Euclidean Algorithm
+    m0 = m
+    x0, x1 = 0, 1
+
+    if m == 1:
+        return 0
+
+    while a > 1:
+        q = a // m
+        a, m = m, a % m
+        x0, x1 = x1 - q * x0, x0
+
+    if x1 < 0:
+        x1 += m0
+
+    return x1
+
+
+def encrypt(plaintext, public_key):
+    e, n = public_key
+    ciphertext = [pow(ord(char), e, n) for char in plaintext]
+    return ciphertext
+
+
+def decrypt(ciphertext, private_key):
+    d, n = private_key
+    plaintext = [chr(pow(char, d, n)) for char in ciphertext]
+    return ''.join(plaintext)
+
+
+def main():
+    # Generate key pair
+    p = 17
+    q = 11
+    public_key, private_key = generate_key_pair(p, q)
+    print("Public key:", public_key)
+    print("Private key:", private_key)
+
+    # Get input from the user
+    plaintext = input("Enter the plaintext: ")
+
+    # Encryption
+    encrypted_text = encrypt(plaintext, public_key)
+    print("Encrypted text:", encrypted_text)
+
+    # Decryption
+    decrypted_text = decrypt(encrypted_text, private_key)
+    print("Decrypted text:", decrypted_text)
+
+
+if __name__ == "__main__":
+    main()

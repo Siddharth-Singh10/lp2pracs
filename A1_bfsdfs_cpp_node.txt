@@ -1,0 +1,234 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+class Node{
+    int val;
+    Node *next;
+    Node(int v){
+        val=v;
+        next=nullptr;
+    }
+    friend class Graph;
+};
+
+class Graph{
+    Node **header;
+    bool *visited;
+    int no_edges;
+    int no_vertex;
+    public:
+    Graph(){
+        no_edges=0;
+        no_vertex=0;
+        header=nullptr;
+        visited=nullptr;
+    }
+    Graph(int v,int e){
+        no_edges=e;
+        no_vertex=v;
+        header=new Node*[v];
+        visited=new bool[v];
+        for(int i=0;i<v;i++){
+            header[i]=nullptr;
+            visited[i]=false;
+        }
+    }
+
+    void addEdge(int source,int destination){
+        Node* dest=new Node(destination);
+        if(header[source]==NULL){
+            header[source]=dest;
+        }
+        else{
+            Node *temp=header[source];
+            while(temp->next!=NULL){
+                temp=temp->next;
+            }
+            temp->next=dest;
+        }
+    }
+
+    void acceptGraph(){
+        int source;
+        int destination;
+        for(int i=0;i<no_edges;i++){
+            cout<<"Enter source->";
+            cin>>source;
+            cout<<endl;
+            cout<<"Enter destination->";
+            cin>>destination;
+            cout<<endl;
+            addEdge(source,destination);
+        }
+    }
+
+    void clearVisited(){
+        for(int i=0;i<no_vertex;i++){
+            visited[i]=false;
+        }
+    }
+
+    void BFS(int startVertex){
+        queue<int> q;
+        q.push(startVertex);
+        visited[startVertex]=true;
+        while(!q.empty()){
+            int x=q.front();
+            q.pop();
+            cout<<x<<" ";
+            Node *temp=header[x];
+            while(temp!=NULL){
+                if(!visited[temp->val]){
+                    q.push(temp->val);
+                    visited[temp->val]=true;
+                }
+                temp=temp->next;
+            }
+        }
+    }
+
+    void DFS(int startVertex){
+        Node* temp=header[startVertex];
+        cout<<startVertex<<" ";
+        visited[startVertex]=true;
+        while(temp!=NULL){
+            if(!visited[temp->val]){
+                DFS(temp->val);
+            }
+            temp=temp->next;
+        }
+    }
+    void display()
+    {
+        for(int i=0;i<no_vertex;i++)
+        {
+            Node* temp=header[i];
+            cout<<i<<"->";
+            while(temp!=nullptr)
+            {
+                cout<<" "<<temp->val;
+                temp=temp->next;
+            }
+            cout<<endl;
+        }
+    }
+};
+int main(){
+    int choice;
+    int startVertex;
+    int v,e;
+    cout<<endl;
+    cout<<"Please Enter number of vertices: ";
+    cin>>v;
+    cout<<endl;
+    cout<<"Please enter number of edges:  ";
+    cin>>e;
+    cout<<endl;
+    Graph g(v,e);
+    g.acceptGraph();
+    while(true){
+        
+        cout<<"\n--------------MENU---------------"<<endl;
+        cout<<"1.Display adjacency list\n2.DFS\n3.BFS\n4.Exit\n";
+        cout<<"---------------------------------\n";
+        cout<<"Enter your choice : ";
+        cin>>choice;
+
+        switch(choice)
+        {
+            case 1:
+                g.display();
+                break;
+
+            case 2:
+                cout<<"Enter starting vertex : ";
+                cin>>startVertex;
+                g.clearVisited();
+                g.DFS(startVertex);
+                break;
+
+            case 3:
+                cout<<"Enter starting vertex : ";
+                cin>>startVertex;
+                g.clearVisited();
+                g.BFS(startVertex);
+                break;
+
+            case 4:
+                cout<<"Thankyou!";
+                exit(1);
+
+            default:
+                cout<<"Enter a valid choice!"<<endl;
+                break;
+        }
+    }
+
+}
+
+/*
+Please Enter number of vertices: 6
+
+Please enter number of edges:  5
+
+Enter source->0
+
+Enter destination->1
+
+Enter source->0
+
+Enter destination->2
+
+Enter source->0
+
+Enter destination->3
+
+Enter source->1
+
+Enter destination->4
+
+Enter source->4
+
+Enter destination->5
+
+
+--------------MENU---------------
+1.Display adjacency list
+2.DFS
+3.BFS
+4.Exit
+---------------------------------
+Enter your choice : 1
+0-> 1 2 3
+1-> 4
+2->
+3->
+4-> 5
+5->
+
+--------------MENU---------------
+1.Display adjacency list
+2.DFS
+3.BFS
+4.Exit
+---------------------------------
+Enter your choice : 2
+Enter starting vertex : 0
+0 1 4 5 2 3
+--------------MENU---------------
+1.Display adjacency list
+2.DFS
+3.BFS
+4.Exit
+---------------------------------
+Enter your choice : 3
+Enter starting vertex : 0
+0 1 2 3 4 5
+--------------MENU---------------
+1.Display adjacency list
+2.DFS
+3.BFS
+4.Exit
+---------------------------------
+Enter your choice : 4
+Thankyou!*/
